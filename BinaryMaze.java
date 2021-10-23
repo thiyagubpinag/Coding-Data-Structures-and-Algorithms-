@@ -1,5 +1,8 @@
-package com.alcatel;
+package com.testing;
 
+//Java program to find the shortest
+//path between a given source cell
+//to a destination cell.
 import java.util.*;
 
 class BinaryMaze {

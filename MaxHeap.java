@@ -9,7 +9,7 @@ public class MaxHeap {
 
 	public static int findKthLargest(List<Integer> ints, int k) {
 		ArrayList res=new ArrayList<>();
-		PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->a-b);
+		PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->b-a);
 		// or pass `Comparator.reverseOrder()`
 		pq.addAll(ints);
 

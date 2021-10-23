@@ -1,9 +1,12 @@
 package com.alcatel;
 
 class Single {
+	int i;
+
+	static Single A = new Single();
 
 	static Single getInstance() {
-		return new Single();
+		return A;
 	}
 
 	private Single() {
@@ -13,10 +16,10 @@ class Single {
 
 public class Singleton {
 	public static void main(String[] args) {
-          Single a=new Single();
-          System.out.println(a);
-          System.out.println(a.getInstance());
-      
+		Single a;
+		Single.getInstance().i=5;
+		System.out.println(Single.getInstance().i);
+
 	}
 
 }
