@@ -1,106 +1,99 @@
-package com.testing;
+package com.alcatel;
 
+/*package whatever //do not write package name here */
+//Java Code implementation for above problem
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 
-import com.testing.BinaryMaze.Point;
+//QItem for current location and distance
+//from source location
+class QItem {
+	int row;
+	int col;
+	int dist;
+
+	public QItem(int row, int col, int dist) {
+		this.row = row;
+		this.col = col;
+		this.dist = dist;
+	}
+}
 
 public class Maze {
+	private static int minDistance(char[][] grid) {
+		QItem source = new QItem(0, 0, 0);
 
-	static int ROW = 9;
-	static int COL = 10;
+		// To keep track of visited QItems. Marking
+		// blocked cells as visited.
+		firstLoop: for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
 
-	static class Point {
-		int x;
-		int y;
-
-		Point(int x, int y) {
-			super();
-			this.x = x;
-			this.y = y;
-		}
-
-	}
-
-	static class QueueNode {
-		Point p;
-		int dist;
-
-		QueueNode(Point p, int dist) {
-			super();
-			this.p = p;
-			this.dist = dist;
-		}
-
-	}
-
-	static int rows[] = { -1, 0, 0, 1 };
-	static int cols[] = { 0, -1, 1, 0 };
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		int mat[][] = { { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 }, { 1, 0, 1, 0, 1, 1, 1, 0, 1, 1 },
-				{ 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 }, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }, { 1, 1, 1, 0, 1, 1, 1, 0, 1, 0 },
-				{ 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-				{ 1, 1, 0, 0, 0, 0, 1, 0, 0, 1 } };
-
-		Point source = new Point(0, 0);
-		Point dest = new Point(3, 4);
-
-		int dist = BFS(mat, source, dest);
-
-		System.out.println(dist);
-	}
-
-	private static int BFS(int[][] mat, Point source, Point dest) {
-		// TODO Auto-generated method stub
-
-		if (mat[dest.x][dest.y] != 1) {
-			return -1;
-		}
-
-		Queue<QueueNode> queue = new LinkedList();
-
-		queue.add(new QueueNode(source, 0));
-
-		boolean[][] visited = new boolean[ROW][COL];
-
-		visited[source.x][source.y] = true;
-
-		while (!queue.isEmpty()) {
-			QueueNode curr = queue.peek();
-
-			Point currPoint = curr.p;
-
-			if (currPoint.x == dest.x && currPoint.y == dest.y) {
-				return curr.dist;
-			}
-
-			int distance = curr.dist;
-
-			queue.remove();
-
-			for (int i = 0; i < 4; i++) {
-				int row = rows[i] + currPoint.x;
-				int col = cols[i] + currPoint.y;
-
-				if (isValid(row, col) && mat[row][col] == 1 && !visited[row][col]) {
-					visited[source.x][source.y] = true;
-					queue.add(new QueueNode(new Point(row, col), distance + 1));
-
+				// Finding source
+				if (grid[i][j] == 's') {
+					source.row = i;
+					source.col = j;
+					break firstLoop;
 				}
-
 			}
-
 		}
 
+		// applying BFS on matrix cells starting from source
+		Queue<QItem> queue = new LinkedList<>();
+		queue.add(new QItem(source.row, source.col, 0));
+
+		boolean[][] visited = new boolean[grid.length][grid[0].length];
+		visited[source.row][source.col] = true;
+
+		while (queue.isEmpty() == false) {
+			QItem p = queue.remove();
+
+			// Destination found;
+			if (grid[p.row][p.col] == 'd')
+				return p.dist;
+
+			// moving up
+			if (isValid(p.row - 1, p.col, grid, visited)) {
+				queue.add(new QItem(p.row - 1, p.col, p.dist + 1));
+				visited[p.row - 1][p.col] = true;
+			}
+
+			// moving down
+			if (isValid(p.row + 1, p.col, grid, visited)) {
+				queue.add(new QItem(p.row + 1, p.col, p.dist + 1));
+				visited[p.row + 1][p.col] = true;
+			}
+
+			// moving left
+			if (isValid(p.row, p.col - 1, grid, visited)) {
+				queue.add(new QItem(p.row, p.col - 1, p.dist + 1));
+				visited[p.row][p.col - 1] = true;
+			}
+
+			// moving right
+			if (isValid(p.row - 1, p.col + 1, grid, visited)) {
+				queue.add(new QItem(p.row, p.col + 1, p.dist + 1));
+				visited[p.row][p.col + 1] = true;
+			}
+		}
 		return -1;
 	}
 
-	private static boolean isValid(int row2, int col2) {
-		// TODO Auto-generated method stub
-		return (row2 >= 0 && row2 < ROW && col2 >= 0 && col2 < COL);
+	// checking where it's valid or not
+	private static boolean isValid(int x, int y, char[][] grid, boolean[][] visited) {
+		if (x >= 0 && y >= 0 && x < grid.length && y < grid[0].length && grid[x][y] != '0' && visited[x][y] == false) {
+			return true;
+		}
+		return false;
 	}
 
+	// Driver code
+	public static void main(String[] args) {
+		char[][] grid = { { '0', '*', '0', 's' }, { '*', '0', '*', '*' }, { '0', '*', '*', '*' },
+				{ 'd', '*', '*', '*' } };
+
+		System.out.println(minDistance(grid));
+	}
 }
+
+// This code is contributed by abhikelge21.

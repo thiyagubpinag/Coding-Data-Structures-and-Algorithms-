@@ -1,52 +1,101 @@
+package com.alcatel;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Testing {
 
-	static int a = 4;
+	private static Integer lock1 = 0;
+	private static Integer lock2 = 0;
 
-	void display() {
-		System.out.println(a);
-
+	public static void getObject(Object a1) {
+		System.out.println("Object 1");
 	}
 
-	public static void main(String[] a) {
+	public static void getObject(String a1) {
+		System.out.println("String 1");
+	}
 
-		int countPrimary = 0;
+	public static void main(String[] args) {
 
-		HashMap<String, String> primaryDeviceCheck = new HashMap<String, String>();
-		primaryDeviceCheck.put("alesDeskphone", "mainalesdeskphonedirnumber");
-		primaryDeviceCheck.put("alesSoftphone", "mainalesmobilephonedirnumber");
+		char a = 'D';
+		a++;
+		System.out.println(a);
 
-		for (String key : primaryDeviceCheck.keySet()) {
-			System.out.println(key + "," + primaryDeviceCheck.get(key));
+		synchronized (lock1) {
+			synchronized (lock2) {
+				synchronized (lock2) {
+					System.out.println("Hello");
+				}
+			}
 		}
 
-		int b[] = { -1,11,2, 3, 7, 7, 8, 8 };
-		int sum = 10;
-		HashMap<Integer, Integer> value = new HashMap();
-
-		for (int i = 0; i < b.length; i++) {
-			value.put(b[i], (value.getOrDefault(b[i], 0)) + 1);
+		Pattern p = Pattern.compile("\\d+");// . represents single character
+		Matcher m = p.matcher("ab2h4u67");
+		int count = 0;
+		while (m.find()) {
+			count++;
+			System.out.println(count);
 		}
 
-		System.out.println(value);
-		ArrayList<String> result = new ArrayList();
-		int count;
-		for (int i = 0; i < b.length; i++) {
-			if (value.containsKey(sum - b[i])) {
-				count = value.get(sum - b[i]);
-				/*
-				 * while (count > 0) { result.add(b[i] + "," + (sum - b[i]));
-				 * count--; }
-				 */
+		Testing a1 = null;
+		getObject(null);
 
-				result.add(b[i] + "," + (sum - b[i]));
-				value.remove(b[i]);
+		String s1 = "abc";
+		String s2 = "cbd";
+
+		for (int i = 0; i < s2.length(); i++) {
+			s1.contains(s2.charAt(i) + "");
+		}
+
+		HashMap<String, Integer> result = new HashMap<String, Integer>();
+
+		String s5 = "kkkk";
+
+		for (int i = 0; i < s5.length(); i++) {
+			for (int j = i; j < s5.length(); j++) {
+				Integer counter = result.get(s5.substring(i, j + 1));
+				if (counter == null) {
+					result.put(s5.substring(i, j + 1), 0);
+				} else {
+					result.put(s5.substring(i, j + 1), counter + 1);
+				}
 			}
 		}
 
 		System.out.println(result);
+		
+		int counter = 0;
+		String val, firstVal, remainingVal;
+		
+		 Iterator<Map.Entry<String, Integer>> iterator = result.entrySet().iterator();
+		    while (iterator.hasNext()) {
+		        Map.Entry<String, Integer> entry = iterator.next();
+		        String value=entry.getKey();
+		        
+		        if (result.get(value) == 0) {
+					val = value;
+					firstVal = val.charAt(0) + "";
+					remainingVal = val.substring(1, val.length());
+					if (!remainingVal.equals(firstVal) && remainingVal.length()>=1 && result.get(remainingVal + firstVal) != null) {
+						System.out.println(firstVal+remainingVal+","+firstVal+","+remainingVal);
+						counter += 1;
+						iterator.remove();
+					}
+
+				} else {
+					counter += result.get(value);
+				}
+		        
+		    }
+
+		System.out.println(counter);
 
 	}
+
 }
