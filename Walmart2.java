@@ -3,7 +3,6 @@ import java.util.ArrayList;
 public class Walmart2 {
 
 	public static void call(int start, int sum, int[] a, ArrayList<Integer> result) {
-		System.out.println(start);
 		
 		if (sum == 0) {
 			System.out.println(result);
@@ -13,12 +12,10 @@ public class Walmart2 {
 			return;
 		}
 		
-		for (int i = 0; i < a.length; i++) {
+		for (int i = start; i < a.length; i++) {
 			result.add(a[i]);
-			if (sum - a[i] >= 0) {
-				call(i + 1, sum - a[i], a, result);
-			}
-			result.clear();
+		    call(i + 1, sum - a[i], a, result);
+			result.remove(result.size()-1);
 		}
 		
 

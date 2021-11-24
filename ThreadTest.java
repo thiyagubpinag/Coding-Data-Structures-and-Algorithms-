@@ -23,12 +23,14 @@ public class ThreadTest {
 
 				// Print the number
 				System.out.print(counter + " ");
-
+				int i = 1 / 0;
 				// Increment counter
 				counter++;
 
 				// Notify to second thread
 				// notify();
+				
+				new RuntimeException();
 			}
 		}
 	}
@@ -71,7 +73,17 @@ public class ThreadTest {
 		});
 
 		Thread t2 = new Thread(() -> {
-			mt.printOddNumber();
+			
+				mt.printOddNumber();
+			
+		});
+
+		t2.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				System.out.println(
+						"Thread Exception Handler :Thread Name :" + t.getName() + " Message :" + e.getMessage());
+			}
 		});
 
 		// Start both threads

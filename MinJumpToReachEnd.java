@@ -24,6 +24,8 @@ public class MinJumpToReachEnd {
 				}
 			}
 		}
+		
+		Arrays.stream(jump).forEach(System.out::println);
 
 		return jump[jump.length - 1];
 	}
