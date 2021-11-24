@@ -1,16 +1,45 @@
-package com.alcatel;
+package com.archieves;
 
 public class BuildHeap {
-	static void heapify(int arr[], int n, int i) {
-		int largest = i; // Initialize largest as root
-		int l = 2 * i + 1; // left = 2*i + 1
-		int r = 2 * i + 2; // right = 2*i + 2
 
-		if (l < n && arr[l] > arr[largest])
-			largest = l;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 
-		if (r < n && arr[r] > arr[largest])
-			largest = r;
+		int arr[] = { 1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17 };
+
+		int n = arr.length;
+
+		buildHeap(arr, n);
+
+		printHeap(arr, n);
+
+	}
+
+	private static void buildHeap(int[] arr, int n) {
+		// Index of last non-leaf node
+		int startIdx = (n / 2) - 1;
+
+		// Perform reverse level order traversal
+		// from last non-leaf node and heapify
+		// each node
+		for (int i = startIdx; i >= 0; i--) {
+			heapify(arr, n, i);
+		}
+
+	}
+
+	private static void heapify(int[] arr, int n, int i) {
+		int largest = i;
+		int left = 2 * i + 1;
+		int right = 2 * i + 2;
+
+		if (left < n && arr[largest] < arr[left]) {
+			largest = left;
+		}
+
+		if (right < n && arr[largest] < arr[right]) {
+			largest = right;
+		}
 
 		if (largest != i) {
 			int swap = arr[i];
@@ -19,14 +48,7 @@ public class BuildHeap {
 
 			heapify(arr, n, largest);
 		}
-	}
 
-	static void buildHeap(int arr[], int n) {
-		int startIdx = (n / 2) - 1;
-
-		for (int i = startIdx; i >= 0; i--) {
-			heapify(arr, n, i);
-		}
 	}
 
 	static void printHeap(int arr[], int n) {
@@ -38,14 +60,4 @@ public class BuildHeap {
 		System.out.println();
 	}
 
-	public static void main(String args[]) {
-
-		int arr[] = { 1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17 };
-
-		int n = arr.length;
-
-		buildHeap(arr, n);
-
-		printHeap(arr, n);
-	}
 }
