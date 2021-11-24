@@ -1,48 +1,42 @@
-import java.util.Stack;
+package com.hackerrank;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class LargestRectangle {
+
 	public static void main(String[] args) {
-		int[] input = { 2, 1, 5, 6, 2, 3 };
-		System.out.println("Max rectangle area: " + largestRectangleArea(input));
+		// TODO Auto-generated method stub
+
+		List<Integer> prices = new ArrayList<Integer>();
+
+		int arr[] = { 1, 2, 3, 4, 5 };
+
+		for (int i = 0; i < arr.length; i++) {
+			prices.add(arr[i]);
+		}
+
+		System.out.println(largestRec(prices));
+
 	}
 
-	public static int largestRectangleArea(int[] heights) {
-		int arraySize = heights.length;
-		int[] left = new int[arraySize];
-		int[] right = new int[arraySize];
-		Stack<Integer> stack = new Stack<>();
-
-		for (int i = 0; i < arraySize; i++) {
-			if (stack.isEmpty()) {
-				left[i] = 0;
-			} else {
-				while (!stack.empty() && heights[stack.peek()] >= heights[i]) {
-					stack.pop();
-				}
-				left[i] = stack.empty() ? 0 : stack.peek() + 1;
+	private static int largestRec(List<Integer> arr) {
+		int count = 0;
+		Collections.sort(arr);
+		int maxValue = Integer.MIN_VALUE;
+		for (int i = 0; i < arr.size(); i++) {
+			int rem = arr.size() - i;
+			if (maxValue < (rem * arr.get(i))) {
+				maxValue = (rem * arr.get(i));
 			}
-			stack.push(i);
 		}
 
-		stack.clear();
+		System.out.println(maxValue);
 
-		for (int i = arraySize - 1; i >= 0; i--) {
-			if (stack.empty()) {
-				right[i] = arraySize - 1;
-			} else {
-				while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
-					stack.pop();
-				}
-				right[i] = stack.isEmpty() ? arraySize - 1 : stack.peek() - 1;
-			}
-			stack.push(i);
-		}
-
-		int maxArea = 0;
-		for (int i = 0; i < arraySize; i++) {
-			int area = heights[i] * (right[i] - left[i] + 1);
-			maxArea = Math.max(maxArea, area);
-		}
-		return maxArea;
+		return 0;
 	}
+
 }
